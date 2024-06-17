@@ -1,0 +1,210 @@
+<div class="calendar-container">
+  <div class="calendar-header">
+    <div>
+      <h2
+        class="calendar-month"
+        *ngIf="currentView === 'month' || currentView === 'week'"
+      >
+        {{ viewDate | date : "MMMM" }}
+        <span>{{ viewDate | date : "y" }}</span>
+      </h2>
+      <h2 class="calendar-month" *ngIf="currentView === 'day'">
+        {{ viewDate | date : "d MMMM" }}
+        <span>{{ viewDate | date : "y" }}</span>
+      </h2>
+      <span class="calendar-dayname" *ngIf="currentView === 'day'">
+        {{ viewDate | date : "EEEE" }}
+      </span>
+    </div>
+    <mat-button-toggle-group
+      class="calendar-view-toggle"
+      name="currentView"
+      (change)="switchToView($event.value)"
+      aria-label="Calendar-View"
+    >
+      <mat-button-toggle checked="{{ true }}" value="{{ CalendarView.Month }}"
+        >Month</mat-button-toggle
+      >
+      <mat-button-toggle value="{{ CalendarView.Week }}"
+        >Week</mat-button-toggle
+      >
+      <mat-button-toggle value="{{ CalendarView.Day }}">Day</mat-button-toggle>
+    </mat-button-toggle-group>
+    <div class="calendar-controls">
+      <button
+        mat-icon-button
+        (click)="previous()"
+        (keydown.enter)="previous()"
+        (keydown.space)="previous()"
+      >
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <button
+        mat-stroked-button
+        (click)="viewToday()"
+        (keydown.enter)="viewToday()"
+        (keydown.space)="viewToday()"
+      >
+        Today
+      </button>
+      <button
+        mat-icon-button
+        (click)="next()"
+        (keydown.enter)="next()"
+        (keydown.space)="next()"
+      >
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Month @start -->
+  <div class="calendar-header-daynames" *ngIf="currentView === 'month'">
+    <div *ngFor="let day of weekDays" class="weekday">{{ day }}</div>
+  </div>
+
+  <div class="calendar-month-grid" *ngIf="currentView === 'month'">
+    <div
+      *ngFor="let date of monthDays"
+      class="calendar-cell"
+      [class.today]="isToday(date)"
+      cdkDropList
+      (cdkDropListDropped)="drop($event, date)"
+      [cdkDropListData]="appointments"
+      [ngStyle]="{ opacity: isCurrentMonth(date) ? '1' : '0.5' }"
+    >
+      <div
+        (click)="selectDate(date)"
+        (keydown.enter)="selectDate(date)"
+        (keydown.space)="selectDate(date)"
+        class="cell-overlay"
+        tabindex="0"
+      ></div>
+      <div class="date">
+        {{ date.getDate() }}
+      </div>
+      <div class="appointments">
+        <ng-container *ngFor="let appointment of appointments">
+          <div
+            *ngIf="isSameDate(appointment.date, date)"
+            class="appointment"
+            cdkDrag
+            cdkDragHandle
+          >
+            <span>{{ appointment.title }}</span>
+            <button
+              mat-icon-button
+              (click)="deleteAppointment(appointment, $event)"
+              (keydown.enter)="deleteAppointment(appointment, $event)"
+              (keydown.space)="deleteAppointment(appointment, $event)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  <!-- Month @end -->
+
+  <!-- Week View -->
+  <div *ngIf="currentView === 'week'" class="calendar-header-daynames weeks">
+    <div class="time-slot-header"></div>
+    <div *ngFor="let day of weekDays; index as i" class="weekday">
+      {{ day }} {{ monthDays[i].getDate() }}
+    </div>
+  </div>
+  <div *ngIf="currentView === 'week'" class="calendar-week-grid">
+    <div class="calendar-timeslot-header">
+      <div *ngFor="let timeSlot of timeSlots" class="calendar-timeslot-cell">
+        <span>{{ timeSlot }}</span>
+      </div>
+    </div>
+    <div class="calendar-week-dates">
+      <div class="calendar-week-date" *ngFor="let day of weekDays; index as i">
+        <div
+          *ngFor="let timeSlot of timeSlots"
+          class="calendar-timeslot-cell"
+          cdkDropList
+          (cdkDropListDropped)="drop($event, monthDays[i])"
+          [cdkDropListData]="appointments"
+        >
+          <div
+            (click)="selectDate(monthDays[i], timeSlot)"
+            (keydown.enter)="selectDate(monthDays[i], timeSlot)"
+            (keydown.space)="selectDate(monthDays[i], timeSlot)"
+            class="cell-overlay"
+            tabindex="0"
+          ></div>
+          <div
+            *ngFor="
+              let appointment of getAppointmentsForDateTime(
+                monthDays[i],
+                timeSlot
+              )
+            "
+            class="appointment"
+            cdkDrag
+            cdkDragHandle
+          >
+            <span>{{ appointment.title }}</span>
+            <button
+              mat-icon-button
+              (click)="deleteAppointment(appointment, $event)"
+              (keydown.enter)="deleteAppointment(appointment, $event)"
+              (keydown.space)="deleteAppointment(appointment, $event)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day View -->
+  <div class="calendar-day-grid" *ngIf="currentView === 'day'">
+    <div class="calendar-timeslot-header">
+      <div class="calendar-timeslot-cell" *ngFor="let slot of timeSlots">
+        <span>{{ slot }}</span>
+      </div>
+    </div>
+    <div class="calendar-day-appointments">
+      <div
+        *ngFor="let slot of timeSlots"
+        class="calendar-timeslot-cell"
+        cdkDropList
+        (cdkDropListDropped)="drop($event, monthDays[0], slot)"
+        [cdkDropListData]="appointments"
+      >
+        <div
+          (click)="selectDate(monthDays[0], slot)"
+          (keydown.enter)="selectDate(monthDays[0], slot)"
+          (keydown.space)="selectDate(monthDays[0], slot)"
+          class="cell-overlay"
+          tabindex="0"
+        ></div>
+        <div
+          *ngFor="
+            let appointment of getAppointmentsForDateTime(monthDays[0], slot)
+          "
+          class="appointment"
+          cdkDrag
+          cdkDragHandle
+        >
+          <div>
+            <span>{{ appointment.title }}</span>
+          </div>
+          <button
+            mat-icon-button
+            (click)="deleteAppointment(appointment, $event)"
+            (keydown.enter)="deleteAppointment(appointment, $event)"
+            (keydown.space)="deleteAppointment(appointment, $event)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
