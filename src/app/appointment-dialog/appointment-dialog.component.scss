@@ -1,6 +1,12 @@
 .dialog-content {
   padding: 30px 30px 20px;
+  h5 {
+    color: #fff;
+  }
   .form-field {
     width: 100%;
+  }
+  .error {
+    color: red;
   }
 }
