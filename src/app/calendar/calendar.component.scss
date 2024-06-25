@@ -2,6 +2,168 @@
   --header-height: 42px;
   --total-weeks: 6;
 }
+.container {
+  max-width: 1140px;
+  margin: auto;
+}
+.cell-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  cursor: pointer;
+}
+.appointment {
+  position: relative;
+  z-index: 9;
+  padding: 5px 10px;
+  margin-top: 2px;
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: lavender;
+  margin-left: 3px;
+  margin-right: 3px;
+  border-radius: 5px;
+  cursor: pointer;
+
+  span {
+    text-align: left;
+    line-height: 15px;
+  }
+}
+.calendar-view-month {
+  table-layout: fixed;
+  margin-top: 1rem;
+  thead {
+    th {
+      font-size: 22px;
+      font-weight: 100;
+      text-align: right;
+      border-bottom: 1px solid #ddd;
+    }
+  }
+  tbody {
+    tr {
+      td {
+        &:first-child {
+          border-left: 1px solid #ddd;
+        }
+        vertical-align: top;
+        position: relative;
+        border-right: 1px solid #ddd;
+        height: 150px;
+        border-bottom: 1px solid #ddd;
+        padding: 3px 0;
+        &.selected {
+          background-color: #bbdefb;
+        }
+
+        &.today {
+          background-color: #e3f2fd;
+        }
+        .date {
+          text-align: right;
+          font-size: 22px;
+          font-weight: 100;
+          padding: 5px 10px 0;
+        }
+      }
+    }
+  }
+}
+.calendar-view-week {
+  margin-top: 1rem;
+  thead {
+    th {
+      font-size: 22px;
+      font-weight: 100;
+      text-align: right;
+      border-bottom: 1px solid #ddd;
+    }
+  }
+  tbody {
+    tr {
+      td {
+        position: relative;
+        border-right: 1px solid #ddd;
+        height: 50px;
+        border-bottom: 1px solid #ddd;
+        padding: 3px 0;
+        width: calc(100% / 7);
+        &.calendar-slot-cell {
+          width: 1%;
+          font-size: 12px;
+          font-weight: 100;
+          border-right: 1px solid #ddd;
+          padding-right: 5px;
+          vertical-align: top;
+          span {
+            position: relative;
+            top: -12px;
+            background: #fff;
+            width: 100%;
+            display: block;
+          }
+        }
+      }
+      &:last-child {
+        td {
+          border-bottom: none;
+          border-right: none;
+          &.calendar-slot-cell {
+            border-right: none;
+          }
+          .cell-overlay {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
+.calendar-view-day {
+  margin-top: 1rem;
+  tr {
+    &:first-child {
+      td {
+        border-top: 1px solid #ddd;
+      }
+    }
+    td {
+      position: relative;
+      border-bottom: 1px solid #ddd;
+      height: 50px;
+      padding: 3px 0;
+      &.calendar-slot-cell {
+        font-size: 12px;
+        font-weight: 100;
+        border-right: 1px solid #ddd;
+        padding-right: 5px;
+        vertical-align: top;
+        span {
+          position: relative;
+          top: -12px;
+          background: #fff;
+          width: 100%;
+          display: block;
+        }
+      }
+    }
+    &:last-child {
+      td {
+        border-bottom: none;
+        &.calendar-slot-cell {
+          border-right: none;
+        }
+        .cell-overlay {
+          display: none;
+        }
+      }
+    }
+  }
+}
 .calendar-container {
   width: 100%;
   height: 100%;
@@ -33,241 +195,10 @@
       justify-content: flex-end;
     }
   }
-
-  .calendar-header-daynames {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    width: 100%;
-    padding: 10px 0;
-    font-size: 22px;
-    font-weight: 100;
-
-    &.weeks {
-      grid-template-columns: 50px repeat(7, 1fr);
-    }
-
-    .weekday {
-      text-align: right;
-      padding-right: 10px;
-    }
-  }
-
-  .calendar-month-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    width: 100%;
-
-    .calendar-cell {
-      height: 150px;
-      border: 1px solid #e0e0e0;
-      box-sizing: border-box;
-      position: relative;
-
-      &.selected {
-        background-color: #bbdefb;
-      }
-
-      &.today {
-        background-color: #e3f2fd;
-      }
-
-      .cell-overlay {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        z-index: 0;
-        cursor: pointer;
-      }
-
-      .date {
-        text-align: right;
-        font-size: 22px;
-        font-weight: 100;
-        padding: 5px 10px 0;
-      }
-
-      .appointments {
-        .appointment {
-          position: relative;
-          z-index: 9;
-          padding-left: 10px;
-          margin-top: 2px;
-          font-size: 12px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          background: lavender;
-          margin-left: 3px;
-          margin-right: 3px;
-          border-radius: 5px;
-
-          span {
-            line-height: 15px;
-          }
-
-          mat-icon {
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-          }
-        }
-      }
-    }
-  }
-
-  .calendar-week-grid {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 50px 1fr;
-
-    .calendar-timeslot-header {
-      border-right: 1px solid #ddd;
-
-      .calendar-timeslot-cell {
-        min-height: 50px;
-        border-top: 1px solid #ddd;
-        border-right: 1px solid #ddd;
-        text-align: right;
-        position: relative;
-
-        &:last-child {
-          min-height: auto;
-        }
-
-        span {
-          position: relative;
-          top: -10px;
-          font-size: 12px;
-          font-weight: 100;
-          background: #fff;
-          width: 100%;
-          display: block;
-          right: 10px;
-        }
-      }
-    }
-
-    .calendar-week-dates {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-
-      .calendar-week-date {
-        .calendar-timeslot-cell {
-          min-height: 50px;
-          border-top: 1px solid #ddd;
-          border-right: 1px solid #ddd;
-          text-align: right;
-          position: relative;
-
-          &:last-child {
-            min-height: auto;
-          }
-
-          .cell-overlay {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            cursor: pointer;
-          }
-
-          .appointment {
-            position: relative;
-            z-index: 9;
-            padding-left: 10px;
-            margin-top: 2px;
-            font-size: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: lavender;
-            margin-left: 3px;
-            margin-right: 3px;
-            border-radius: 5px;
-
-            span {
-              text-align: left;
-              line-height: 15px;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  .calendar-day-grid {
-    width: 100%;
-    grid-template-columns: 50px 1fr;
-    display: grid;
-    margin-top: 1rem;
-
-    .calendar-timeslot-header {
-      border-right: 1px solid #ddd;
-
-      .calendar-timeslot-cell {
-        min-height: 50px;
-        border-top: 1px solid #ddd;
-        border-right: 1px solid #ddd;
-        text-align: right;
-        position: relative;
-
-        &:last-child {
-          min-height: auto;
-        }
-
-        span {
-          position: relative;
-          top: -10px;
-          font-size: 12px;
-          font-weight: 100;
-          background: #fff;
-          width: 100%;
-          display: block;
-          right: 10px;
-        }
-      }
-    }
-
-    .calendar-day-appointments {
-      .calendar-timeslot-cell {
-        min-height: 50px;
-        border-top: 1px solid #ddd;
-        text-align: right;
-        position: relative;
-
-        &:last-child {
-          min-height: auto;
-        }
-
-        .cell-overlay {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          z-index: 0;
-          cursor: pointer;
-        }
-
-        .appointment {
-          position: relative;
-          z-index: 9;
-          padding-left: 10px;
-          margin-top: 2px;
-          font-size: 12px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          background: lavender;
-          margin-left: 3px;
-          margin-right: 3px;
-          border-radius: 5px;
-
-          span {
-            text-align: left;
-            line-height: 15px;
-          }
-        }
-      }
-    }
+}
+.black-icon {
+  color: black;
+  svg {
+    fill: black;
   }
 }

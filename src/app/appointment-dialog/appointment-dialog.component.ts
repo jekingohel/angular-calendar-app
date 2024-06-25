@@ -36,12 +36,19 @@ export class AppointmentDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<AppointmentDialogComponent>,
     @Inject(MAT_DIALOG_DATA)
-    public data: { date: Date; title: string; startTime: string },
+    public data: {
+      uuid: string;
+      date: Date;
+      title: string;
+      startTime: string;
+      endTime: string;
+      color: string;
+    },
     private formBuilder: FormBuilder
   ) {
     this.appointmentForm = this.formBuilder.group(
       {
-        title: ['', Validators.required],
+        title: [this.data.title || '', Validators.required],
         date: [this.data.date, Validators.required],
         startTime: [this.data.startTime || '', Validators.required],
         endTime: [this.data.startTime || '', Validators.required],
@@ -61,9 +68,14 @@ export class AppointmentDialogComponent {
         date: this.appointmentForm.controls['date'].value,
         startTime: this.appointmentForm.controls['startTime'].value,
         endTime: this.appointmentForm.controls['endTime'].value,
+        uuid: this.data.uuid,
       };
       this.dialogRef.close(data);
     }
+  }
+
+  onDeleteClick(): void {
+    this.dialogRef.close({ remove: true, uuid: this.data.uuid });
   }
 
   timeRangeValidator: ValidatorFn = (

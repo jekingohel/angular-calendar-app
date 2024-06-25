@@ -1,5 +1,6 @@
 <div class="dialog-content">
-  <h5 mat-dialog-title>Add Appointment</h5>
+  <h5 mat-dialog-title *ngIf="!data.uuid">Add Appointment</h5>
+  <h5 mat-dialog-title *ngIf="data.uuid">Edit Appointment</h5>
   <div [formGroup]="appointmentForm">
     <div mat-dialog-content>
       <mat-form-field class="form-field">
@@ -30,9 +31,24 @@
       </div>
     </div>
     <div mat-dialog-actions align="end">
-      <button mat-button (click)="onNoClick()">Cancel</button>
-      <button type="submit" mat-button (click)="onSaveClick()">
-        Add Appointment
+      <button type="submit" mat-flat-button (click)="onSaveClick()">
+        <span *ngIf="data.uuid">Edit Appointment</span>
+        <span *ngIf="!data.uuid">Add Appointment</span>
+      </button>
+      <button
+        (click)="onDeleteClick()"
+        *ngIf="data.uuid"
+        style="margin-left: 10px"
+        mat-stroked-button
+      >
+        Delete
+      </button>
+      <button
+        style="margin-left: 10px"
+        mat-stroked-button
+        (click)="onNoClick()"
+      >
+        Cancel
       </button>
     </div>
   </div>
