@@ -1,6 +1,13 @@
 {
   "name": "angular-calendar-app",
-  "version": "0.0.0",
+  "version": "0.0.1",
+  "author": "Jekin Gohel <jekin1991@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jekingohel/angular-calendar-app.git"
+  },
+  "homepage": "https://github.com/jekingohel/angular-calendar-app",
+  "description": "A simple calendar app built with Angular, Angular Material, and Angular CDK for managing appointments.",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -40,5 +47,18 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.4.2",
     "typescript-eslint": "8.0.0-alpha.20"
-  }
+  },
+  "keywords": [
+    "angular",
+    "angular18",
+    "angular-material",
+    "angular-cdk",
+    "typescript",
+    "calendar",
+    "calendar-view",
+    "drag-and-drop",
+    "lazyload",
+    "event",
+    "appointment"
+  ]
 }
