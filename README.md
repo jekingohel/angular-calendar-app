@@ -4,9 +4,9 @@ This is a simple calendar application built using Angular, Angular Material, and
 
 ![Month View](/screenshots/1.png?raw=true "Month View")
 ![Week View](/screenshots/2.png?raw=true "Week View")
-![Day View](/screenshots/1.png?raw=true "Day View")
-![Add Appointment](/screenshots/1.png?raw=true "Add Appointment")
-![Edit Appointment](/screenshots/1.png?raw=true "Edit Appointment")
+![Day View](/screenshots/3.png?raw=true "Day View")
+![Add Appointment](/screenshots/4.png?raw=true "Add Appointment")
+![Edit Appointment](/screenshots/5.png?raw=true "Edit Appointment")
 
 
 ## Features
