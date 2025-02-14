@@ -490,7 +490,7 @@ export class CalendarComponent {
 
   viewToday(): void {
     this.viewDate = new Date();
-    this.generateMonthView(this.viewDate);
+    this.generateView(this.currentView, this.viewDate);
   }
 
   isCurrentMonth(date: Date): boolean {
